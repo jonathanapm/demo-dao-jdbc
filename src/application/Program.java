@@ -6,6 +6,8 @@ import model.entities.Department;
 import model.entities.Seller;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Scanner;
 
 public class Program {
 
@@ -13,9 +15,18 @@ public class Program {
 
       SellerDAO sellerDAO = DaoFactory.createSellerDao();
 
-      Seller seller = sellerDAO.findById(3);
+      Department department = new Department();
+      department.setId(1);
+      department.setName("Computers");
 
-      System.out.print(seller.getEmail());
+      List<Seller> seller = sellerDAO.findByDepartment(department);
+
+      System.out.println(seller.toArray());
+
+      for (Seller item : seller) {
+          System.out.print(item);
+          System.out.println("");
+      }
 
     }
 }
