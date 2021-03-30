@@ -39,7 +39,7 @@ public class SellerDAOJDBCImpl implements SellerDAO {
     public Seller findById(Integer id) {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
-        Seller seller = new Seller();
+       ;
 
         try {
             statement = connection.prepareStatement(
@@ -54,19 +54,12 @@ public class SellerDAOJDBCImpl implements SellerDAO {
             resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
-                Department department = new Department();
-                department.setId(resultSet.getInt("DepartmentId"));
-                department.setName(resultSet.getString("Name"));
-
-                seller.setId(resultSet.getInt("Id"));
-                seller.setName(resultSet.getString("Name"));
-                seller.setEmail(resultSet.getString("Email"));
-                seller.setBaseSalary(resultSet.getDouble("BaseSalary"));
-                seller.setBirthDate(resultSet.getDate("BirthDate"));
-                seller.setDepartment(department);
-
+                Department department = instantiateDepartment(resultSet);
+                Seller seller = instantiateSeller(resultSet, department);
                 return seller;
             }
+
+            return null;
 
         } catch (SQLException e) {
             throw new DbException(e.getMessage());
@@ -74,12 +67,28 @@ public class SellerDAOJDBCImpl implements SellerDAO {
             DBConnection.closeStatement(statement);
             DBConnection.closeResultSet(resultSet);
         }
-
-        return seller;
     }
 
     @Override
     public List<Seller> findAll() {
         return null;
+    }
+
+    private Department instantiateDepartment(ResultSet resultSet) throws SQLException {
+        Department department = new Department();
+        department.setId(resultSet.getInt("DepartmentId"));
+        department.setName(resultSet.getString("Name"));
+        return department;
+    }
+
+    private Seller instantiateSeller(ResultSet resultSet, Department department) throws SQLException {
+        Seller seller = new Seller();
+        seller.setId(resultSet.getInt("Id"));
+        seller.setName(resultSet.getString("Name"));
+        seller.setEmail(resultSet.getString("Email"));
+        seller.setBaseSalary(resultSet.getDouble("BaseSalary"));
+        seller.setBirthDate(resultSet.getDate("BirthDate"));
+        seller.setDepartment(department);
+        return seller;
     }
 }
