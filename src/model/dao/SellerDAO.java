@@ -7,7 +7,6 @@ import java.util.List;
 
 public interface SellerDAO {
 
-
     void insert(Seller seller);
 
     void update(Seller seller);
