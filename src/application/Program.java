@@ -13,20 +13,13 @@ public class Program {
 
     public static void main(String[] args) {
 
-      SellerDAO sellerDAO = DaoFactory.createSellerDao();
+        SellerDAO sellerDAO = DaoFactory.createSellerDao();
 
-      Department department = new Department();
-      department.setId(1);
-      department.setName("Computers");
+        Department department = new Department(1, "");
+        Seller seller = new Seller(null, "Greg", "greg@gmail.com", new Date(), 4000.0, department);
 
-      List<Seller> seller = sellerDAO.findByDepartment(department);
+        sellerDAO.insert(seller);
 
-      System.out.println(seller.toArray());
-
-      for (Seller item : seller) {
-          System.out.print(item);
-          System.out.println("");
-      }
-
+        System.out.println("New seller Id " + seller.getId());
     }
 }
